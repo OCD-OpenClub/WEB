@@ -27,7 +27,7 @@
                         colors: {
                             brand: {
                                 green: '#00D64F', 
-                                greenDark: '#00A33C', // Verde más oscuro para legibilidad en texto
+                                greenDark: '#009933', // Verde ajustado para legibilidad en fondos claros
                                 silver: '#F3F4F6', 
                                 lead: '#656568',   
                                 dark: '#080808',   
@@ -60,7 +60,7 @@
             overflow-x: hidden;
         }
 
-        /* TEXTURA DE RUIDO CINEMÁTICO */
+        /* TEXTURA DE RUIDO (Noise) */
         .noise-overlay {
             position: fixed;
             top: 0;
@@ -69,16 +69,16 @@
             height: 100%;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.04;
+            opacity: 0.035;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Utilidades */
+        /* Glass Panel Moderno */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
         }
         
         .led-pulse { animation: soft-pulse 3s infinite; }
@@ -87,7 +87,6 @@
             50% { opacity: 0.5; box-shadow: 0 0 6px #00D64F; }
         }
 
-        .blend-text { mix-blend-mode: exclusion; color: white; }
         .hide-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -132,9 +131,28 @@
             const containerRef = useRef(null);
 
             const slides = [
-                { id: 1, title: "DIGITAL INFRASTRUCTURE", sub: "ASSET CREATION", desc: "No fotografiamos productos, los clonamos. Creamos gemelos digitales (Digital Twins) con texturas 8K listos para cualquier entorno.", img: "image_54974c.png", fallback: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?q=80&w=2070&auto=format&fit=crop" },
-                { id: 2, title: "VIRTUAL PRODUCTION", sub: "INFINITE STUDIO", desc: "Un estudio sin límites físicos. Cambia la iluminación, el clima o la ubicación de tu campaña con un solo clic. Cero huella de carbono.", img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" },
-                { id: 3, title: "GENERATIVE EDITORIAL", sub: "AI DIRECTION", desc: "Dirección de arte generativa para crear variaciones masivas de campaña, personalizadas para cada segmento de tu audiencia.", img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop" }
+                { 
+                    id: 1, 
+                    title: "DIGITAL INFRASTRUCTURE", 
+                    sub: "ASSET CREATION", 
+                    desc: "No fotografiamos productos, los clonamos. Creamos gemelos digitales (Digital Twins) con texturas 8K listos para cualquier entorno.", 
+                    img: "image_54974c.png", 
+                    fallback: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?q=80&w=2070&auto=format&fit=crop" 
+                },
+                { 
+                    id: 2, 
+                    title: "VIRTUAL PRODUCTION", 
+                    sub: "INFINITE STUDIO", 
+                    desc: "Un estudio sin límites físicos. Cambia la iluminación, el clima o la ubicación de tu campaña con un solo clic. Cero huella de carbono.", 
+                    img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" 
+                },
+                { 
+                    id: 3, 
+                    title: "GENERATIVE EDITORIAL", 
+                    sub: "AI DIRECTION", 
+                    desc: "Dirección de arte generativa para crear variaciones masivas de campaña, personalizadas para cada segmento de tu audiencia.", 
+                    img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop" 
+                }
             ];
 
             useEffect(() => {
@@ -165,7 +183,7 @@
                                     <div className="flex items-center gap-3 mb-4">
                                         <span className="font-mono text-xs font-bold text-zinc-500 uppercase tracking-widest">SYSTEM 0{activeSlide + 1}</span>
                                         <div className="h-px w-12 bg-zinc-400"></div>
-                                        {/* Ajuste de color para mayor legibilidad */}
+                                        {/* TEXTO VERDE AJUSTADO (greenDark) */}
                                         <span className="font-mono text-xs font-bold text-brand-greenDark uppercase tracking-widest">{slides[activeSlide].sub}</span>
                                     </div>
                                     <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter leading-[0.9] text-zinc-900">{slides[activeSlide].title}</h2>
@@ -179,9 +197,18 @@
         };
 
         // --- MODEL CARD ---
-        const ModelCard = ({ name, code, imgUrl, type }) => (
+        const ModelCard = ({ name, code, img, type }) => (
             <div className="group relative aspect-[3/4] bg-white overflow-hidden border border-zinc-200 hover:border-brand-green transition-colors duration-300">
-                <img src={imgUrl} alt={name} className="w-full h-full object-cover filter grayscale contrast-110 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105" />
+                <img 
+                    src={img} 
+                    alt={name} 
+                    className="w-full h-full object-cover filter grayscale contrast-110 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105"
+                    onError={(e) => { 
+                        // Fallback genérico si la imagen específica falla
+                        e.target.onerror = null; 
+                        e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop"; 
+                    }}
+                />
                 <div className="absolute inset-0 p-4 flex flex-col justify-between">
                     <div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <span className="bg-brand-green text-black text-[10px] font-mono font-bold px-2 py-1">AVAILABLE</span>
@@ -200,7 +227,7 @@
             </div>
         );
 
-        // --- DEPLOYMENT SECTION (New Style) ---
+        // --- DEPLOYMENT SECTION REWORKED ---
         const DeploymentSection = () => (
             <div className="py-24 px-6 bg-white border-y border-zinc-100">
                 <div className="max-w-6xl mx-auto">
@@ -210,31 +237,42 @@
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Box 1 */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-zinc-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group cursor-default">
-                            <div className="h-64 bg-zinc-100 mb-6 relative overflow-hidden rounded-2xl">
-                                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply" />
-                                <div className="absolute top-3 right-3 font-mono text-[10px] font-bold bg-white/90 text-black px-3 py-1 rounded-full">9:16</div>
+                        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
+                            
+                            <div className="h-56 mb-8 relative rounded-2xl overflow-hidden shadow-inner">
+                                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                                <div className="absolute top-4 left-4 font-mono text-[10px] font-bold bg-white text-black px-3 py-1 rounded-full shadow-lg">9:16 VERTICAL</div>
                             </div>
-                            <h3 className="font-bold text-xl mb-3 text-zinc-900">SOCIAL VERTICAL</h3>
-                            <p className="text-sm text-zinc-500 leading-relaxed">Reels, TikToks y Stories generados en masa para testeo A/B constante. Mantén el feed activo sin quemar presupuesto en logística.</p>
+                            <h3 className="font-black text-2xl mb-3 text-zinc-900 uppercase">SOCIAL CONTENT</h3>
+                            <p className="text-sm text-zinc-500 leading-relaxed font-medium">Reels, TikToks y Stories generados en masa. Mantén el feed activo sin quemar presupuesto en logística.</p>
                         </div>
+                        
                         {/* Box 2 */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-zinc-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group cursor-default">
-                            <div className="h-64 bg-zinc-100 mb-6 relative overflow-hidden rounded-2xl">
-                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply" />
-                                <div className="absolute top-3 right-3 font-mono text-[10px] font-bold bg-white/90 text-black px-3 py-1 rounded-full">WEB</div>
+                        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
+                            
+                            <div className="h-56 mb-8 relative rounded-2xl overflow-hidden shadow-inner">
+                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                                <div className="absolute top-4 left-4 font-mono text-[10px] font-bold bg-white text-black px-3 py-1 rounded-full shadow-lg">WEB / SHOP</div>
                             </div>
-                            <h3 className="font-bold text-xl mb-3 text-zinc-900">E-COMMERCE</h3>
-                            <p className="text-sm text-zinc-500 leading-relaxed">Fichas de producto con modelos consistentes. Reduce devoluciones y aumenta la conversión mostrando tu producto en humanos digitales perfectos.</p>
+                            <h3 className="font-black text-2xl mb-3 text-zinc-900 uppercase">E-COMMERCE</h3>
+                            <p className="text-sm text-zinc-500 leading-relaxed font-medium">Fichas de producto con modelos consistentes. Reduce devoluciones mostrando tu producto en humanos digitales perfectos.</p>
                         </div>
+
                         {/* Box 3 */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-zinc-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group cursor-default">
-                            <div className="h-64 bg-zinc-100 mb-6 relative overflow-hidden rounded-2xl">
-                                <img src="https://images.unsplash.com/photo-1626785774583-ea261e963229?q=80&w=1974&auto=format&fit=crop" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply" />
-                                <div className="absolute top-3 right-3 font-mono text-[10px] font-bold bg-white/90 text-black px-3 py-1 rounded-full">OOH</div>
+                        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
+                            
+                            <div className="h-56 mb-8 relative rounded-2xl overflow-hidden shadow-inner">
+                                <img src="https://images.unsplash.com/photo-1626785774583-ea261e963229?q=80&w=1974&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                                <div className="absolute top-4 left-4 font-mono text-[10px] font-bold bg-white text-black px-3 py-1 rounded-full shadow-lg">HIGH RES</div>
                             </div>
-                            <h3 className="font-bold text-xl mb-3 text-zinc-900">CAMPAIGNS</h3>
-                            <p className="text-sm text-zinc-500 leading-relaxed">Activos de ultra-alta resolución (4K/8K) listos para impresión en gran formato, vallas publicitarias y revistas.</p>
+                            <h3 className="font-black text-2xl mb-3 text-zinc-900 uppercase">GLOBAL CAMPAIGNS</h3>
+                            <p className="text-sm text-zinc-500 leading-relaxed font-medium">Activos de ultra-alta resolución (8K) listos para impresión en gran formato, vallas publicitarias y revistas.</p>
                         </div>
                     </div>
                 </div>
@@ -247,7 +285,8 @@
           const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
           const models = [
-            { name: "Aeon", code: "K-BTY-01", type: "K-BEAUTY", img: "https://raw.githubusercontent.com/OCD-OpenClub/WEB/refs/heads/main/images/AEON.jpegq=80&w=1974&auto=format&fit=crop" },
+            // IMAGEN AEON ACTUALIZADA CON FALLBACK
+            { name: "Aeon", code: "K-BTY-01", type: "K-BEAUTY", img: "https://raw.githubusercontent.com/OCD-OpenClub/WEB/refs/heads/main/images/AEON.jpeg" },
             { name: "Kai", code: "K-MALE-02", type: "STREET", img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e194?q=80&w=1974&auto=format&fit=crop" },
             { name: "Nova", code: "STR-F-01", type: "FASHION", img: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706?q=80&w=1976&auto=format&fit=crop" },
             { name: "Zion", code: "STR-M-02", type: "SPORT", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop" },
@@ -307,7 +346,12 @@
                     </div>
                     <div className="lg:col-span-4 flex flex-col items-start lg:items-end">
                         <div className="w-full aspect-square bg-zinc-200 relative overflow-hidden border border-zinc-300">
-                             <img src="image_5f1e4f.png" className="w-full h-full object-cover grayscale mix-blend-multiply opacity-80" onError={(e) => e.target.style.display = 'none'} />
+                             {/* FOTO HERO */}
+                             <img 
+                                src="image_5f1e4f.png" 
+                                className="w-full h-full object-cover grayscale mix-blend-multiply opacity-80" 
+                                onError={(e) => { e.target.style.display = 'none'; }} 
+                             />
                              <div className="absolute bottom-2 right-2 font-mono text-[10px]">FIG. 01</div>
                         </div>
                         <div className="mt-4 font-mono text-xs text-zinc-400 text-right">
@@ -338,7 +382,7 @@
                 </div>
               </section>
 
-              {/* DEPLOYMENT SCENARIOS */}
+              {/* DEPLOYMENT SCENARIOS (REWORKED) */}
               <DeploymentSection />
 
               {/* ADN ID */}
