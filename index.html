@@ -150,7 +150,7 @@
         const HeroCarousel = () => {
             const [currentSlide, setCurrentSlide] = useState(0);
             const slides = [
-                // ACTUALIZACIÓN: URL DE MINJI ACTUALIZADA
+                // URL DE MINJI ACTUALIZADA
                 { img: "https://github.com/OCD-OpenClub/WEB/blob/99129f46518f1d7a69153730ff69d2debf77e1aa/images/Hero/minji1.jpeg?raw=true", title: "MINJI", subtitle: "K-BEAUTY" },
                 { img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e194?q=80&w=1974", title: "KAI", subtitle: "STREET" },
                 { img: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706?q=80&w=1976", title: "NOVA", subtitle: "FASHION" }
@@ -250,7 +250,7 @@
             );
         };
 
-        // --- COMPONENTE SERVICE BENTO GRID ---
+        // --- SERVICE BENTO GRID ---
         const ServiceBento = () => {
             return (
                 <section className="py-24 px-4 md:px-6 bg-brand-silver border-y border-zinc-200">
@@ -349,30 +349,81 @@
             </div>
         );
 
-        // --- DEPLOYMENT SECTION ---
+        // --- DEPLOYMENT SECTION (BENTO ASIMÉTRICO) ---
         const DeploymentSection = () => (
-            <div className="py-24 px-6 bg-white border-y border-zinc-100">
-                <div className="max-w-6xl mx-auto">
-                    <div className="mb-16 flex justify-between items-end">
-                        <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900">DEPLOYMENT SCENARIOS</h2>
-                        <span className="font-mono text-xs font-bold text-zinc-400 hidden md:block tracking-widest">/// WHERE YOUR ASSETS LIVE</span>
+            <div className="py-24 px-6 bg-zinc-50 border-y border-zinc-200 relative overflow-hidden">
+                {/* Tech Background Pattern */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <div className="mb-16 flex flex-col md:flex-row justify-between items-end gap-6">
+                        <div>
+                            <span className="font-mono text-xs font-bold text-brand-greenDark uppercase tracking-widest mb-2 block">/// OUTPUT FORMATS</span>
+                            <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-zinc-900 leading-[0.85]">
+                                DEPLOYMENT<br/><span className="text-zinc-400">SCENARIOS</span>
+                            </h2>
+                        </div>
+                        <p className="text-zinc-500 font-medium max-w-sm text-right hidden md:block">
+                            Adapting digital assets for every channel.<br/>From mobile screens to billboards.
+                        </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            { title: "SOCIAL CONTENT", desc: "Reels, TikToks y Stories generados en masa. Mantén el feed activo.", tag: "9:16 VERTICAL", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974" },
-                            { title: "E-COMMERCE", desc: "Fichas de producto con modelos consistentes. Reduce devoluciones.", tag: "WEB / SHOP", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015" },
-                            { title: "GLOBAL CAMPAIGNS", desc: "Activos de ultra-alta resolución (8K) listos para impresión en gran formato.", tag: "HIGH RES", img: "https://images.unsplash.com/photo-1626785774583-ea261e963229?q=80&w=1974" }
-                        ].map((item, i) => (
-                            <div key={i} className="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
-                                <div className="h-48 md:h-56 mb-6 md:mb-8 relative rounded-2xl overflow-hidden shadow-inner bg-zinc-100">
-                                    <img src={item.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100 mix-blend-multiply" loading="lazy" />
-                                    <div className="absolute top-4 left-4 font-mono text-[10px] font-bold bg-white text-black px-3 py-1 rounded-full shadow-lg">{item.tag}</div>
-                                </div>
-                                <h3 className="font-black text-xl md:text-2xl mb-3 text-zinc-900 uppercase">{item.title}</h3>
-                                <p className="text-sm text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 h-auto md:h-[600px]">
+                        
+                        {/* 1. SOCIAL VERTICAL (Tall Card) - Span 4 cols */}
+                        <div className="md:col-span-4 relative group overflow-hidden rounded-[2rem] bg-black border border-zinc-200 cursor-crosshair h-[500px] md:h-auto">
+                            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-60"></div>
+                            
+                            {/* Tech Overlay */}
+                            <div className="absolute top-6 right-6 font-mono text-[10px] text-white border border-white/30 px-2 py-1 rounded backdrop-blur-md">9:16</div>
+                            
+                            <div className="absolute bottom-0 left-0 p-8 w-full">
+                                <div className="h-[1px] w-full bg-brand-green mb-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                                <h3 className="text-3xl font-black text-white mb-2 uppercase italic">Social<br/>Vertical</h3>
+                                <p className="text-zinc-300 text-xs leading-relaxed max-w-[90%] transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                                    Reels, TikToks y Stories masivos. Dominio del feed vertical.
+                                </p>
                             </div>
-                        ))}
+                        </div>
+
+                        {/* Right Column Container - Span 8 cols */}
+                        <div className="md:col-span-8 flex flex-col gap-4 md:gap-6">
+                            
+                            {/* 2. E-COMMERCE (Wide Card) */}
+                            <div className="flex-1 relative group overflow-hidden rounded-[2rem] bg-zinc-900 border border-zinc-200 cursor-crosshair min-h-[280px]">
+                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
+                                
+                                <div className="absolute top-6 right-6 font-mono text-[10px] text-white border border-white/30 px-2 py-1 rounded backdrop-blur-md">WEB / SHOP</div>
+
+                                <div className="absolute bottom-0 left-0 p-8 w-full flex flex-col justify-end h-full">
+                                    <h3 className="text-3xl font-black text-white mb-1 uppercase italic self-start">E-Commerce</h3>
+                                    <div className="flex items-end justify-between">
+                                        <p className="text-zinc-300 text-xs max-w-sm">Consistencia visual en catálogo. Aumenta conversión, reduce retornos.</p>
+                                        <ArrowRight className="text-brand-green w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-4 group-hover:translate-x-0 duration-300" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 3. GLOBAL CAMPAIGNS (Wide Card) */}
+                            <div className="flex-1 relative group overflow-hidden rounded-[2rem] bg-white border border-zinc-200 cursor-crosshair min-h-[280px]">
+                                <img src="https://images.unsplash.com/photo-1626785774583-ea261e963229?q=80&w=1974" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
+                                <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors"></div>
+                                
+                                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent opacity-90 group-hover:opacity-40 transition-opacity duration-500"></div>
+
+                                <div className="absolute top-6 right-6 font-mono text-[10px] text-black border border-black/10 px-2 py-1 rounded backdrop-blur-md bg-white/50">8K ULTRA-RES</div>
+
+                                <div className="absolute bottom-0 left-0 p-8 w-full">
+                                    <h3 className="text-3xl font-black text-black mb-1 uppercase italic relative z-10">Global Campaigns</h3>
+                                    <p className="text-zinc-600 text-xs max-w-sm font-bold relative z-10">
+                                        Desde vallas publicitarias hasta revistas. Resolución infinita.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
