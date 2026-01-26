@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<link rel="icon" type="image/png" href="tu-icono.png">
+
+<meta property="og:title" content="OPEN CLUB DEPARTMENT | Virtual Production Studio">
+<meta property="og:description" content="Democratizando el diseño de élite mediante tecnología. Activos digitales y talento sintético.">
+<meta property="og:image" content="URL_DE_TU_IMAGEN_HERO.jpg">
+<meta property="og:type" content="website">
+
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OCD - OPEN CLUB DEPARTMENT</title>
@@ -152,7 +160,7 @@
                     title: "DIGITAL INFRASTRUCTURE", 
                     sub: "ASSET CREATION", 
                     desc: "No fotografiamos productos, los clonamos. Creamos gemelos digitales (Digital Twins) con texturas 8K listos para cualquier entorno.", 
-                    img: "image_54974c.png", 
+                    img: "image_54974c.png", loading="lazy",
                     fallback: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?q=80&w=2070&auto=format&fit=crop" 
                 },
                 { 
@@ -160,14 +168,14 @@
                     title: "VIRTUAL PRODUCTION", 
                     sub: "INFINITE STUDIO", 
                     desc: "Un estudio sin límites físicos. Cambia la iluminación, el clima o la ubicación de tu campaña con un solo clic. Cero huella de carbono.", 
-                    img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" 
+                    img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" ,loading="lazy",
                 },
                 { 
                     id: 3, 
                     title: "GENERATIVE EDITORIAL", 
                     sub: "AI DIRECTION", 
                     desc: "Dirección de arte generativa para crear variaciones masivas de campaña, personalizadas para cada segmento de tu audiencia.", 
-                    img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop" 
+                    img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop", loading="lazy",
                 }
             ];
 
@@ -189,7 +197,7 @@
                     <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center bg-[#E5E5E5]">
                         {slides.map((slide, index) => (
                             <div key={slide.id} className={`absolute inset-0 transition-opacity duration-700 ease-out ${activeSlide === index ? 'opacity-100' : 'opacity-0'}`}>
-                                <img src={slide.img} alt={slide.title} className="w-full h-full object-cover filter grayscale-[20%]" onError={(e) => { if(slide.fallback) e.target.src = slide.fallback; }} />
+                                <img src={slide.img} loading="lazy" alt={slide.title} className="w-full h-full object-cover filter grayscale-[20%]" onError={(e) => { if(slide.fallback) e.target.src = slide.fallback; }} />
                                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
                             </div>
                         ))}
