@@ -27,7 +27,7 @@
                         colors: {
                             brand: {
                                 green: '#00D64F', 
-                                greenDark: '#009933', // Verde ajustado para legibilidad en fondos claros
+                                greenDark: '#009933', 
                                 silver: '#F3F4F6', 
                                 lead: '#656568',   
                                 dark: '#080808',   
@@ -39,11 +39,26 @@
                         },
                         animation: {
                             'scroll': 'scroll 20s linear infinite',
+                            'fade-in': 'fadeIn 0.3s ease-out',
+                            'slide-up': 'slideUp 0.4s ease-out',
+                            'zoom-in': 'zoomIn 0.3s ease-out',
                         },
                         keyframes: {
                             scroll: {
                                 '0%': { transform: 'translateX(0)' },
                                 '100%': { transform: 'translateX(-100%)' },
+                            },
+                            fadeIn: {
+                                '0%': { opacity: '0' },
+                                '100%': { opacity: '1' },
+                            },
+                            slideUp: {
+                                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                                '100%': { transform: 'translateY(0)', opacity: '1' },
+                            },
+                            zoomIn: {
+                                '0%': { transform: 'scale(0.95)', opacity: '0' },
+                                '100%': { transform: 'scale(1)', opacity: '1' },
                             }
                         }
                     }
@@ -60,7 +75,6 @@
             overflow-x: hidden;
         }
 
-        /* TEXTURA DE RUIDO (Noise) */
         .noise-overlay {
             position: fixed;
             top: 0;
@@ -73,7 +87,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Glass Panel Moderno */
         .glass-panel {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
@@ -106,7 +119,10 @@
         const Close = () => <Icon><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></Icon>;
         const ChevronDown = () => <Icon><polyline points="6 9 12 15 18 9"/></Icon>;
         const ArrowRight = () => <Icon><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></Icon>;
+        const ArrowLeft = () => <Icon><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></Icon>;
         const Terminal = () => <Icon><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></Icon>;
+        const Maximize = () => <Icon><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></Icon>;
+        const ZoomIn = () => <Icon><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></Icon>;
 
         // --- MARQUEE TECH STACK ---
         const TechMarquee = () => {
@@ -183,7 +199,6 @@
                                     <div className="flex items-center gap-3 mb-4">
                                         <span className="font-mono text-xs font-bold text-zinc-500 uppercase tracking-widest">SYSTEM 0{activeSlide + 1}</span>
                                         <div className="h-px w-12 bg-zinc-400"></div>
-                                        {/* TEXTO VERDE AJUSTADO (greenDark) */}
                                         <span className="font-mono text-xs font-bold text-brand-greenDark uppercase tracking-widest">{slides[activeSlide].sub}</span>
                                     </div>
                                     <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter leading-[0.9] text-zinc-900">{slides[activeSlide].title}</h2>
@@ -197,37 +212,214 @@
         };
 
         // --- MODEL CARD ---
-        const ModelCard = ({ name, code, img, type }) => (
-            <div className="group relative aspect-[3/4] bg-white overflow-hidden border border-zinc-200 hover:border-brand-green transition-colors duration-300">
+        const ModelCard = ({ model, onClick }) => (
+            <div 
+                className="group relative aspect-[3/4] bg-white overflow-hidden border border-zinc-200 hover:border-brand-green transition-all duration-300 cursor-pointer"
+                onClick={() => onClick(model)}
+            >
                 <img 
-                    src={img} 
-                    alt={name} 
+                    src={model.img} 
+                    alt={model.name} 
                     className="w-full h-full object-cover filter grayscale contrast-110 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105"
-                    onError={(e) => { 
-                        // Fallback genérico si la imagen específica falla
-                        e.target.onerror = null; 
-                        e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop"; 
-                    }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop"; }}
                 />
                 <div className="absolute inset-0 p-4 flex flex-col justify-between">
                     <div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="bg-brand-green text-black text-[10px] font-mono font-bold px-2 py-1">AVAILABLE</span>
-                        <Terminal className="text-white w-4 h-4" />
+                        <span className="bg-brand-green text-black text-[10px] font-mono font-bold px-2 py-1">VIEW FILE</span>
+                        <Maximize className="text-white w-5 h-5 drop-shadow-md" />
                     </div>
                     <div className="bg-white/95 backdrop-blur p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 border-t border-brand-green">
                         <div className="flex justify-between items-end">
                             <div>
-                                <h3 className="text-xl font-bold uppercase tracking-tight leading-none">{name}</h3>
-                                <span className="text-[10px] font-mono text-zinc-500 block mt-1">{code}</span>
+                                <h3 className="text-xl font-bold uppercase tracking-tight leading-none">{model.name}</h3>
+                                <span className="text-[10px] font-mono text-zinc-500 block mt-1">{model.code}</span>
                             </div>
-                            <span className="text-[10px] font-mono font-bold border border-black px-2 py-1 rounded-full">{type}</span>
+                            <span className="text-[10px] font-mono font-bold border border-black px-2 py-1 rounded-full">{model.type}</span>
                         </div>
                     </div>
                 </div>
             </div>
         );
 
-        // --- DEPLOYMENT SECTION REWORKED ---
+        // --- MODEL DETAIL MODAL (CON NAVEGACIÓN COMPLETA) ---
+        const ModelDetailModal = ({ model, onClose, onNext, onPrev }) => {
+            const [lightboxIndex, setLightboxIndex] = useState(null);
+
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    // Si el lightbox está abierto, navegamos fotos
+                    if (lightboxIndex !== null) {
+                        if (e.key === 'Escape') setLightboxIndex(null);
+                        if (e.key === 'ArrowRight') nextImage();
+                        if (e.key === 'ArrowLeft') prevImage();
+                    } else {
+                        // Si el lightbox está CERRADO, navegamos MODELOS
+                        if (e.key === 'Escape') onClose();
+                        if (e.key === 'ArrowRight') onNext();
+                        if (e.key === 'ArrowLeft') onPrev();
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [lightboxIndex, onClose, onNext, onPrev]);
+
+            if (!model) return null;
+
+            // Funciones para Lightbox
+            const nextImage = (e) => {
+                if (e) e.stopPropagation();
+                setLightboxIndex((prev) => (prev + 1) % model.gallery.length);
+            };
+            const prevImage = (e) => {
+                if (e) e.stopPropagation();
+                setLightboxIndex((prev) => (prev - 1 + model.gallery.length) % model.gallery.length);
+            };
+
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+                    
+                    {/* BOTONES DE NAVEGACIÓN DE MODELOS (FLECHAS LATERALES) */}
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onPrev(); }} 
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white text-white hover:text-black p-4 rounded-full backdrop-blur-md border border-white/20 transition-all hidden md:flex"
+                    >
+                        <ArrowLeft className="w-6 h-6" />
+                    </button>
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onNext(); }} 
+                        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white text-white hover:text-black p-4 rounded-full backdrop-blur-md border border-white/20 transition-all hidden md:flex"
+                    >
+                        <ArrowRight className="w-6 h-6" />
+                    </button>
+
+                    <div className="relative bg-white w-full max-w-5xl h-[90vh] rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row animate-slide-up z-10">
+                        <button onClick={onClose} className="absolute top-6 right-6 z-20 bg-white/50 hover:bg-white p-2 rounded-full backdrop-blur transition-colors">
+                            <Close className="text-black w-6 h-6" />
+                        </button>
+
+                        <div className="w-full md:w-5/12 h-1/3 md:h-full relative bg-zinc-200">
+                            {/* Key fuerza re-render al cambiar de modelo */}
+                            <img 
+                                key={model.code}
+                                src={model.img} 
+                                className="w-full h-full object-cover animate-fade-in" 
+                                alt={model.name}
+                                onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop"; }}
+                            />
+                            <div className="absolute bottom-6 left-6">
+                                <h2 className="text-6xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-lg">{model.name}</h2>
+                                <span className="text-brand-green font-mono text-sm font-bold bg-black/50 px-2 py-1 backdrop-blur">{model.code}</span>
+                            </div>
+                        </div>
+
+                        <div className="w-full md:w-7/12 h-2/3 md:h-full bg-white p-8 md:p-12 overflow-y-auto hide-scroll flex flex-col">
+                            
+                            <div className="mb-10 flex justify-between items-start border-b border-zinc-100 pb-6">
+                                <div>
+                                    <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest mb-1 block">Subject Profile</span>
+                                    <p className="text-zinc-600 text-sm max-w-md leading-relaxed animate-fade-in">{model.bio}</p>
+                                </div>
+                                <div className="text-right hidden md:block">
+                                    <span className="block font-bold text-2xl">{model.type}</span>
+                                    <span className="text-xs text-brand-green font-mono">AVAILABLE FOR LICENSING</span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-4 mb-10">
+                                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                                    <span className="text-[10px] font-mono text-zinc-400 block mb-1">HEIGHT (VIRTUAL)</span>
+                                    <span className="font-bold text-zinc-900">178 CM</span>
+                                </div>
+                                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                                    <span className="text-[10px] font-mono text-zinc-400 block mb-1">ARCHETYPE</span>
+                                    <span className="font-bold text-zinc-900">{model.archetype}</span>
+                                </div>
+                                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                                    <span className="text-[10px] font-mono text-zinc-400 block mb-1">BEST FOR</span>
+                                    <span className="font-bold text-zinc-900">{model.bestFor}</span>
+                                </div>
+                            </div>
+
+                            <div className="mb-10 flex-grow">
+                                <div className="flex justify-between items-end mb-4">
+                                    <h4 className="font-bold text-lg uppercase">Visual Data Logs</h4>
+                                    <span className="font-mono text-[10px] text-zinc-400">/// CLICK TO EXPAND & NAVIGATE</span>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3 h-32 md:h-40">
+                                    {model.gallery.map((img, i) => (
+                                        <div 
+                                            key={i} 
+                                            className="relative rounded-lg overflow-hidden group cursor-pointer border border-zinc-200"
+                                            onClick={() => setLightboxIndex(i)}
+                                        >
+                                            <img src={img} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                                            
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm">
+                                                    <ZoomIn className="text-white w-5 h-5" />
+                                                </div>
+                                            </div>
+
+                                            <span className="absolute bottom-2 left-2 text-[8px] font-mono text-white bg-black/50 px-1 rounded backdrop-blur">
+                                                {['EDITORIAL', 'E-COMMERCE', 'SOCIAL'][i]}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <button className="w-full bg-black text-white py-5 font-bold font-mono text-sm uppercase tracking-widest hover:bg-brand-green hover:text-black transition-all flex justify-center items-center gap-3 rounded-xl shadow-lg">
+                                Initialize Booking Sequence <ArrowRight />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* LIGHTBOX OVERLAY */}
+                    {lightboxIndex !== null && (
+                        <div 
+                            className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 animate-fade-in backdrop-blur-md"
+                            onClick={() => setLightboxIndex(null)}
+                        >
+                            <button className="absolute top-6 right-6 text-white p-2 hover:text-brand-green transition-colors z-50">
+                                <Close className="w-10 h-10" />
+                            </button>
+
+                            <button 
+                                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white p-4 hover:text-brand-green transition-colors z-50 bg-black/20 hover:bg-black/50 rounded-full"
+                                onClick={prevImage}
+                            >
+                                <ArrowLeft className="w-8 h-8" />
+                            </button>
+
+                            <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
+                                <img 
+                                    key={lightboxIndex} 
+                                    src={model.gallery[lightboxIndex]} 
+                                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-zoom-in pointer-events-auto select-none" 
+                                    onClick={(e) => e.stopPropagation()} 
+                                />
+                            </div>
+
+                            <button 
+                                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white p-4 hover:text-brand-green transition-colors z-50 bg-black/20 hover:bg-black/50 rounded-full"
+                                onClick={nextImage}
+                            >
+                                <ArrowRight className="w-8 h-8" />
+                            </button>
+
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/70 font-mono text-xs tracking-widest bg-black/50 px-6 py-3 rounded-full flex gap-4 backdrop-blur-md border border-white/10">
+                                <span className="font-bold text-white">IMG 0{lightboxIndex + 1} / 0{model.gallery.length}</span>
+                                <span className="text-brand-green">{['EDITORIAL', 'E-COMMERCE', 'SOCIAL'][lightboxIndex] || 'VIEW'}</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // --- DEPLOYMENT SECTION ---
         const DeploymentSection = () => (
             <div className="py-24 px-6 bg-white border-y border-zinc-100">
                 <div className="max-w-6xl mx-auto">
@@ -236,7 +428,6 @@
                         <span className="font-mono text-xs font-bold text-zinc-400 hidden md:block tracking-widest">/// WHERE YOUR ASSETS LIVE</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {/* Box 1 */}
                         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
                             
@@ -249,7 +440,6 @@
                             <p className="text-sm text-zinc-500 leading-relaxed font-medium">Reels, TikToks y Stories generados en masa. Mantén el feed activo sin quemar presupuesto en logística.</p>
                         </div>
                         
-                        {/* Box 2 */}
                         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
                             
@@ -262,7 +452,6 @@
                             <p className="text-sm text-zinc-500 leading-relaxed font-medium">Fichas de producto con modelos consistentes. Reduce devoluciones mostrando tu producto en humanos digitales perfectos.</p>
                         </div>
 
-                        {/* Box 3 */}
                         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-zinc-100 hover:shadow-2xl hover:border-brand-green/30 transition-all duration-500 group cursor-default relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-brand-silver rounded-bl-[4rem] -mr-4 -mt-4 transition-colors group-hover:bg-brand-green/10"></div>
                             
@@ -282,17 +471,109 @@
         // --- APP PRINCIPAL ---
         const OCDLanding = () => {
           const [isMenuOpen, setIsMenuOpen] = useState(false);
-          const [openFaqIndex, setOpenFaqIndex] = useState(null);
+          const [selectedModel, setSelectedModel] = useState(null);
 
           const models = [
-            // IMAGEN AEON ACTUALIZADA CON FALLBACK
-            { name: "Aeon", code: "K-BTY-01", type: "K-BEAUTY", img: "https://raw.githubusercontent.com/OCD-OpenClub/WEB/refs/heads/main/images/AEON.jpeg" },
-            { name: "Kai", code: "K-MALE-02", type: "STREET", img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e194?q=80&w=1974&auto=format&fit=crop" },
-            { name: "Nova", code: "STR-F-01", type: "FASHION", img: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706?q=80&w=1976&auto=format&fit=crop" },
-            { name: "Zion", code: "STR-M-02", type: "SPORT", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop" },
-            { name: "Lyra", code: "LUX-F-01", type: "LUXURY", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop" },
-            { name: "Atlas", code: "LUX-M-02", type: "FORMAL", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop" },
+            { 
+                name: "Aeon", 
+                code: "K-BTY-01", 
+                type: "K-BEAUTY", 
+                img: "https://raw.githubusercontent.com/OCD-OpenClub/WEB/refs/heads/main/images/AEON.jpeg",
+                bio: "Designed for flawlessness. Aeon features hyper-realistic skin texture simulation optimized for skincare and cosmetic close-ups.",
+                archetype: "ETHEREAL YOUTH",
+                bestFor: "SKINCARE / COSMETICS",
+                gallery: [
+                    "https://images.unsplash.com/photo-1552699609-899587e7a77d?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1512413914633-b5043f4041ea?q=80&w=1000"
+                ]
+            },
+            { 
+                name: "Kai", 
+                code: "K-MALE-02", 
+                type: "STREET", 
+                img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e194?q=80&w=1974&auto=format&fit=crop",
+                bio: "Urban edge personified. Kai brings attitude and motion capability perfect for streetwear drops and action-oriented campaigns.",
+                archetype: "URBAN EXPLORER",
+                bestFor: "STREETWEAR / SNEAKERS",
+                gallery: [
+                    "https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1523307730650-594bc63f9d67?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000"
+                ]
+            },
+            { 
+                name: "Nova", 
+                code: "STR-F-01", 
+                type: "FASHION", 
+                img: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706?q=80&w=1976&auto=format&fit=crop",
+                bio: "High fashion versatility. Nova's structural features adapt seamlessly to avant-garde styling and runway simulations.",
+                archetype: "MODERN MUSE",
+                bestFor: "HIGH FASHION / EDITORIAL",
+                gallery: [
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1485960994840-902a67e187c8?q=80&w=1000"
+                ]
+            },
+            { 
+                name: "Zion", 
+                code: "STR-M-02", 
+                type: "SPORT", 
+                img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop",
+                bio: "Peak performance build. Zion is engineered for dynamic motion capture, ideal for activewear and sports tech integration.",
+                archetype: "THE ATHLETE",
+                bestFor: "ACTIVEWEAR / TECH",
+                gallery: [
+                    "https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=1000"
+                ]
+            },
+            { 
+                name: "Lyra", 
+                code: "LUX-F-01", 
+                type: "LUXURY", 
+                img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop",
+                bio: "Sophistication and grace. Lyra is designed for jewelry and luxury goods, with detailed hand models and elegant posture rigging.",
+                archetype: "TIMELESS ELEGANCE",
+                bestFor: "JEWELRY / PERFUME",
+                gallery: [
+                    "https://images.unsplash.com/photo-1617122390772-97b77468444e?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1588510883634-11883838202e?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=1000"
+                ]
+            },
+            { 
+                name: "Atlas", 
+                code: "LUX-M-02", 
+                type: "FORMAL", 
+                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop",
+                bio: "The modern executive. Atlas provides a trustworthy and composed presence suitable for banking, tech, and formal menswear.",
+                archetype: "THE PROFESSIONAL",
+                bestFor: "SUITING / CORPORATE",
+                gallery: [
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1000",
+                    "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?q=80&w=1000"
+                ]
+            },
           ];
+
+          // Funciones para navegar entre modelos en el modal
+          const handleNextModel = () => {
+              if (!selectedModel) return;
+              const currentIndex = models.findIndex(m => m.code === selectedModel.code);
+              const nextIndex = (currentIndex + 1) % models.length;
+              setSelectedModel(models[nextIndex]);
+          };
+
+          const handlePrevModel = () => {
+              if (!selectedModel) return;
+              const currentIndex = models.findIndex(m => m.code === selectedModel.code);
+              const prevIndex = (currentIndex - 1 + models.length) % models.length;
+              setSelectedModel(models[prevIndex]);
+          };
 
           return (
             <div className="relative font-sans text-brand-dark selection:bg-brand-green selection:text-white">
@@ -376,13 +657,13 @@
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-px bg-zinc-200 border border-zinc-200">
                         {models.map((model, idx) => (
-                            <ModelCard key={idx} {...model} />
+                            <ModelCard key={idx} model={model} onClick={setSelectedModel} />
                         ))}
                     </div>
                 </div>
               </section>
 
-              {/* DEPLOYMENT SCENARIOS (REWORKED) */}
+              {/* DEPLOYMENT SCENARIOS */}
               <DeploymentSection />
 
               {/* ADN ID */}
@@ -412,6 +693,14 @@
                       </div>
                   </div>
               </section>
+
+              {/* MODAL (OVERLAY) - With Full Navigation Props */}
+              <ModelDetailModal 
+                  model={selectedModel} 
+                  onClose={() => setSelectedModel(null)} 
+                  onNext={handleNextModel}
+                  onPrev={handlePrevModel}
+              />
 
               {/* FOOTER */}
               <footer className="bg-white pt-20 pb-10 px-6 border-t border-zinc-200">
